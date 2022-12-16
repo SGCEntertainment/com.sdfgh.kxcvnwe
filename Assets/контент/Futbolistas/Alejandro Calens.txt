@@ -1,0 +1,12 @@
+﻿Fecha de nacimiento
+04.05.1992 (30 años)
+
+Fecha	Sobre	D	G	Cc
+El 20 de noviembre de 2022	1	0	0	0
+El 17 de noviembre de 2022	1	0	0	0
+El 31 de octubre de 2022	1	0	0	0
+El 23 de octubre de 2022	1	0	0	0
+El 18 de octubre de 2022	1	0	0	0
+El 9 de octubre de 2022	1	0	0	0
+El 2 de octubre de 2022	1	0	1	0
+El 25 de septiembre de 2022	1	0	0			
