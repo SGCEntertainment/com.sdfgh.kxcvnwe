@@ -44,9 +44,12 @@ public class Engine : MonoBehaviour
 	public bool AM_DEVICE_IDGet;
 
 	string target;
-	string config = null;
+    private string Config
+    {
+        get => Resources.Load<TextAsset>("config").text;
+    }
 
-	string GAID = "[NONE]";
+    string GAID = "[NONE]";
 	string AM_DEVICE_ID = "[NONE]";
 	string appsFlyerUID = "[NONE]";
 
@@ -92,20 +95,23 @@ public class Engine : MonoBehaviour
 
 	async Task Awake()
 	{
-		if (Utilities.CheckForInternetConnection())
-		{
-			await InitializeRemoteConfigAsync();
-		}
+        if (Utilities.CheckForInternetConnection())
+        {
+            await InitializeRemoteConfigAsync();
+        }
 
-		RemoteConfigService.Instance.FetchCompleted += (responce) =>
-		{
-			config = RemoteConfigService.Instance.appConfig.GetJson("data");
-			PlayerPrefsUtil.SetConfig(config);
-		};
+        RemoteConfigService.Instance.FetchCompleted += (responce) =>
+        {
+            bool enable = RemoteConfigService.Instance.appConfig.GetBool("enable");
+            if (!enable)
+            {
+                OnFinalActionEvent?.Invoke(string.Empty);
+            }
+        };
 
-		await RemoteConfigService.Instance.FetchConfigsAsync(new UserAttributes(), new AppAttributes());
-		servicesInitialized = true;
-	}
+        await RemoteConfigService.Instance.FetchConfigsAsync(new UserAttributes(), new AppAttributes());
+        servicesInitialized = true;
+    }
 
 	async Task InitializeRemoteConfigAsync()
 	{
@@ -158,8 +164,7 @@ public class Engine : MonoBehaviour
 			yield return null;
 		}
 
-		config = PlayerPrefsUtil.GetConfig();
-		container = Decriptor.GetData(config, out encryptData);
+		container = Decriptor.GetData(Config, out encryptData);
 
 		AppsFlyer.setIsDebug(true);
 		AppsFlyer.initSDK(container.initData.appsFlyerAppId_prop, "");
